@@ -1,5 +1,5 @@
 CC=clang
-CFLAGS=-lssl
+CFLAGS=
 SOURCE= $(wildcard src/*.c)
 INCLUDE=-I./include
 OUT=-o
