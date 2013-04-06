@@ -3,33 +3,33 @@
 
 typedef struct
 {
-	char name[866];
-	char artist[151];
-	unsigned int year;
+	char *name;
+	char *artist;
+	unsigned short int year;
 } album;
 
 typedef struct
 {
 	album *albums;
-	unsigned int length;
+	unsigned long int length;
 } master;
 
 typedef struct
 {
 	album **albums;
-	unsigned int length;
+	unsigned long int length;
 } nameTable;
 
 typedef struct
 {
 	album **albums;
-	unsigned int length;
+	unsigned long int length;
 } artistTable;
 
 typedef struct
 {
 	album **albums;
-	unsigned int length;
+	unsigned long int length;
 } yearTable;
 
 #endif
