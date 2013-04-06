@@ -52,7 +52,6 @@ int main()
 		while(1)
 		{
 			ch = (char)(fgetc(database));
-			printf("Looking for record separator or EOF: %x\n",ch);
 			if(ch == EOF)
 			{
 				break;
@@ -65,7 +64,6 @@ int main()
 				while(1)
 				{
 					ch = (char)(fgetc(database));
-					printf("Looking for char or NULL: %x\n",ch);
 					if(ch == EOF)
 					{
 						printf("Database is corrupt.\nEOF inside of record name.\n");
@@ -78,7 +76,6 @@ int main()
 						for(unsigned int i=0;i<(namesize+1);i++)
 						{
 							*(thisname+i) = (char)fgetc(database);
-							printf("Just added this byte to next album name: %x\n",*(thisname+i));
 						}
 						break;
 					}
@@ -88,12 +85,10 @@ int main()
 					}
 				}
 				(masterList.albums+(masterList.length-1))->name = thisname;
-				printf("Just added this album name: %s\n",(masterList.albums+(masterList.length-1))->name);
 				int artistsize = 0;
 				while(1)
 				{
 					ch = (char)fgetc(database);
-					printf("Looking for char or NULL: %x\n",ch);
 					if(ch == EOF)
 					{
 						printf("Database is corrupt.\nEOF inside of record artist.\n");
@@ -115,13 +110,11 @@ int main()
 					}
 				}
 				(masterList.albums+(masterList.length-1))->artist = thisartist;
-				printf("Just added this artist name: %s\n",(masterList.albums+(masterList.length-1))->artist);
 				char yearchars[2];
 				yearchars[0] = (char)fgetc(database);
-				printf("Looking for first half of int: %x\n",yearchars[0]);
 				yearchars[1] = (char)fgetc(database);
-				printf("Looking for second half of int: %x\n",yearchars[0]);
-				(masterList.albums+(masterList.length-1))->year = (unsigned short int)(*yearchars);
+				(masterList.albums+(masterList.length-1))->year = *(unsigned short int*)yearchars;
+				printf("Just added this album year: %d\n",(masterList.albums+(masterList.length-1))->year);
 			}
 			else
 			{
