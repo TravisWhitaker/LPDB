@@ -52,6 +52,7 @@ int main()
 		while(1)
 		{
 			ch = (char)(fgetc(database));
+			printf("Looking for record separator or EOF: %x\n",ch);
 			if(ch == EOF)
 			{
 				break;
@@ -60,10 +61,11 @@ int main()
 			{
 				masterList.length++;
 				masterList.albums = realloc(masterList.albums,sizeof(album)*masterList.length);
-				unsigned int namesize = 0;
+				int namesize = 0;
 				while(1)
 				{
 					ch = (char)(fgetc(database));
+					printf("Looking for char or NULL: %x\n",ch);
 					if(ch == EOF)
 					{
 						printf("Database is corrupt.\nEOF inside of record name.\n");
@@ -71,11 +73,12 @@ int main()
 					}
 					else if(ch == '\0')
 					{
-						fseek(database,(0-namesize),SEEK_CUR);
+						fseek(database,(-1)*(namesize+1),SEEK_CUR);
 						thisname = malloc(namesize+1);
 						for(unsigned int i=0;i<(namesize+1);i++)
 						{
 							*(thisname+i) = (char)fgetc(database);
+							printf("Just added this byte to next album name: %x\n",*(thisname+i));
 						}
 						break;
 					}
@@ -85,10 +88,12 @@ int main()
 					}
 				}
 				(masterList.albums+(masterList.length-1))->name = thisname;
-				unsigned int artistsize = 0;
+				printf("Just added this album name: %s\n",(masterList.albums+(masterList.length-1))->name);
+				int artistsize = 0;
 				while(1)
 				{
 					ch = (char)fgetc(database);
+					printf("Looking for char or NULL: %x\n",ch);
 					if(ch == EOF)
 					{
 						printf("Database is corrupt.\nEOF inside of record artist.\n");
@@ -96,7 +101,7 @@ int main()
 					}
 					else if(ch == '\0')
 					{
-						fseek(database,(0-artistsize),SEEK_CUR);
+						fseek(database,(-1)*(artistsize+1),SEEK_CUR);
 						thisartist = malloc(artistsize+1);
 						for(unsigned int i=0;i<(artistsize+1);i++)
 						{
@@ -110,9 +115,12 @@ int main()
 					}
 				}
 				(masterList.albums+(masterList.length-1))->artist = thisartist;
+				printf("Just added this artist name: %s\n",(masterList.albums+(masterList.length-1))->artist);
 				char yearchars[2];
 				yearchars[0] = (char)fgetc(database);
+				printf("Looking for first half of int: %x\n",yearchars[0]);
 				yearchars[1] = (char)fgetc(database);
+				printf("Looking for second half of int: %x\n",yearchars[0]);
 				(masterList.albums+(masterList.length-1))->year = (unsigned short int)(*yearchars);
 			}
 			else
