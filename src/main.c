@@ -114,7 +114,6 @@ int main()
 				yearchars[0] = (char)fgetc(database);
 				yearchars[1] = (char)fgetc(database);
 				(masterList.albums+(masterList.length-1))->year = *(unsigned short int*)yearchars;
-				printf("Just added this album year: %d\n",(masterList.albums+(masterList.length-1))->year);
 			}
 			else
 			{
